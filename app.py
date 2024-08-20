@@ -12,22 +12,22 @@ from langchain_community.callbacks import get_openai_callback
 
 
 def load_openai_api_key():
-    
     load_dotenv()
-    
     openai_api_key = os.getenv("OPENAI_API_KEY")
     if not openai_api_key:
-        raise ValueError("Unable to retrieve open api key")
+        raise ValueError("Unable to retrieve open ai api key")
     return openai_api_key
 
 def text_processing_from_pdf(pdf):
+    
     pdf = PdfReader(pdf)
     text = ""
+    
     for page in pdf.pages:
         text += page.extract_text()
+        
     text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=200, length_function=len)
     chunks = text_splitter.split_text(text)
-        
     embeddings = OpenAIEmbeddings()
     knowledge_base = FAISS.from_texts(chunks, embeddings)
     
@@ -64,6 +64,7 @@ def main():
 
             st.subheader('Summary Results:')
             st.write(response)
+            
 if __name__ == "__main__":
   main()
 
